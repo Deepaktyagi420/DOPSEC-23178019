@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing system dependencies..."
+      - apt-get update && apt-get install -y libpq-dev
+      - echo "Installing Python dependencies..."
+      - pip install --upgrade pip
+      - pip install -r requirements.txt
+  pre_build:
+    commands:
+      - echo "Running pre-build checks..."
+      - python manage.py check
+  build:
+    commands:
+      - echo "Running migrations..."
+      - python manage.py migrate
+      - echo "Collecting static files..."
+      - python manage.py collectstatic --noinput
+  post_build:
+    commands:
+      - echo "Running tests..."
+      - python manage.py test
